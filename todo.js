@@ -1,11 +1,15 @@
 // let todos = [];
 const fs = require('fs');
 const TODO_PATH = './todo.txt';
+const DONE_PATH = './done.txt';
 
 function init() {
   //create file if it's not present present.
   if (!fs.existsSync(TODO_PATH)) {
     setData([]);
+  }
+  if (!fs.existsSync(DONE_PATH)) {
+    setDoneData('');
   }
 }
 
@@ -26,15 +30,29 @@ function setData(data) {
   fs.writeFileSync(TODO_PATH, dataString);
 }
 
+function setDoneData(data) {
+  var dataString = data === undefined ? '' : data;
+  // write to file
+  fs.appendFileSync(DONE_PATH, `${dataString}\n`);
+}
+
 const addTodo = (todo) => {
   const todos = getData();
   const index = todos.length + 1;
   if (!todo) {
     console.log('Error: Missing todo string. Nothing added!');
   } else {
-    todos.push({ index, text: todo, completed: false });
+    todos.push({ index, text: todo, completed: false, dateOfCompletion: null });
     setData(todos);
     console.log(`Added todo: "${todo}"`);
+  }
+};
+
+const addDoneTodo = (todo) => {
+  if (!todo) {
+    console.log('Some Error Occurred!');
+  } else {
+    setDoneData(`x ${todo.dateOfCompletion} ${todo.text}`);
   }
 };
 
@@ -52,7 +70,7 @@ const showRemainingTodos = () => {
   }
 };
 
-const deleteTodo = (index) => {
+const deleteTodo = (index, num = 1) => {
   let todos = getData();
   let todo = todos.find((todo) => todo.index === index);
   if (!todo) {
@@ -64,8 +82,9 @@ const deleteTodo = (index) => {
       todos[i].index = i + 1;
     }
     setData(todos);
-
-    console.log(`Deleted todo #${index}\n`);
+    if (num === 1) {
+      console.log(`Deleted todo #${index}\n`);
+    }
   }
 };
 
@@ -76,9 +95,17 @@ const completeTodo = (index) => {
     console.log(`Error: todo #${index} does not exist.`);
   } else {
     todos[index - 1].completed = true;
+    todos[index - 1].dateOfCompletion = `${new Date(
+      Date.now()
+    ).getFullYear()}-${new Date(Date.now()).getMonth() + 1}-${new Date(
+      Date.now()
+    ).getDate()}`;
+
     console.log(`Marked todo #${index} as done.`);
   }
   setData(todos);
+  addDoneTodo(todos[index - 1]);
+  deleteTodo(index, 2);
 };
 
 const showHelp = () => {

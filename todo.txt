@@ -1,1 +1,1 @@
-[{"index":1,"text":"the thing i need to do","completed":true},{"index":2,"text":"water the plants","completed":true},{"index":3,"text":"find needle in the haystack","completed":false}]
+[]
