@@ -36,13 +36,18 @@ function setDoneData(data) {
   fs.appendFileSync(DONE_PATH, `${dataString}\n`);
 }
 
-const addTodo = (todo) => {
+const addTodo = (todo, prio) => {
   const todos = getData();
   const index = todos.length + 1;
   if (!todo) {
     console.log('Error: Missing todo string. Nothing added!');
   } else {
-    todos.push({ index, text: todo, completed: false, dateOfCompletion: null });
+    todos.push({
+      index,
+      text: todo,
+      completed: false,
+      dateOfCompletion: null,
+    });
     setData(todos);
     console.log(`Added todo: "${todo}"`);
   }
@@ -62,11 +67,25 @@ const showRemainingTodos = () => {
     console.log('There are no pending todos!');
   } else {
     todos = todos.filter((todo) => todo.completed === false);
+
     for (let i = todos.length - 1; i >= 0; i--) {
       if (todos[i].completed === false) {
         console.log(`[${i + 1}] ${todos[i].text}`);
       }
     }
+  }
+};
+
+const showRemainingTodosInHtml = () => {
+  let todos = getData();
+  if (todos.length === 0) {
+    console.log('There are no pending todos!');
+  } else {
+    todos = todos.filter((todo) => todo.completed === false);
+
+    todos = todos.map((todo) => `<li>${todo.text}</li>`).join('\n');
+    todos = `<ul> \n ${todos} \n </ul`;
+    console.log(todos);
   }
 };
 
@@ -110,6 +129,7 @@ const showHelp = () => {
   console.log(`Usage :-
 $ ./todo add "todo item"  # Add a new todo
 $ ./todo ls               # Show remaining todos
+$ ./todo html             # Show a list with html tags
 $ ./todo del NUMBER       # Delete a todo
 $ ./todo done NUMBER      # Complete a todo
 $ ./todo help             # Show usage
@@ -151,6 +171,7 @@ const showReport = () => {
 
 const argument = process.argv[2];
 const details = process.argv[3];
+
 init();
 
 switch (argument) {
@@ -166,6 +187,9 @@ switch (argument) {
   }
   case 'ls':
     showRemainingTodos();
+    break;
+  case 'html':
+    showRemainingTodosInHtml();
     break;
   case 'del':
     if (details === undefined) {
