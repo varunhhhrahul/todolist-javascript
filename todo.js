@@ -95,11 +95,9 @@ const completeTodo = (index) => {
     console.log(`Error: todo #${index} does not exist.`);
   } else {
     todos[index - 1].completed = true;
-    todos[index - 1].dateOfCompletion = `${new Date(
-      Date.now()
-    ).getFullYear()}-${new Date(Date.now()).getMonth() + 1}-${new Date(
-      Date.now()
-    ).getDate()}`;
+    todos[index - 1].dateOfCompletion = `${new Date()
+      .toISOString()
+      .slice(0, 10)}`;
 
     console.log(`Marked todo #${index} as done.`);
   }
@@ -142,11 +140,12 @@ const countCompletedTodos = () => {
 
 const showReport = () => {
   console.log(
-    `${new Date(Date.now()).getFullYear()}-${
-      new Date(Date.now()).getMonth() + 1
-    }-${new Date(
-      Date.now()
-    ).getDate()} Pending : ${countPendingTodos()} Completed : ${countCompletedTodos()}`
+    `${new Date()
+      .toISOString()
+      .slice(
+        0,
+        10
+      )} Pending : ${countPendingTodos()} Completed : ${countCompletedTodos()}`
   );
 };
 
