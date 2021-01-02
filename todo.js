@@ -1,7 +1,7 @@
 // let todos = [];
 const fs = require('fs');
-const TODO_PATH = './todo.txt';
-const DONE_PATH = './done.txt';
+const TODO_PATH = `${process.cwd()}/todo.txt`;
+const DONE_PATH = `${process.cwd()}/done.txt`;
 
 function init() {
   //create file if it's not present present.
@@ -105,7 +105,7 @@ const completeTodo = (index) => {
   }
   setData(todos);
   addDoneTodo(todos[index - 1]);
-  deleteTodo(index, 2);
+  // deleteTodo(index, 2);
 };
 
 const showHelp = () => {
