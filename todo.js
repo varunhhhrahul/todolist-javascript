@@ -9,7 +9,7 @@ function init() {
     setData([]);
   }
   if (!fs.existsSync(DONE_PATH)) {
-    setDoneData('');
+    // setDoneData('');
   }
 }
 
