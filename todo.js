@@ -1,4 +1,3 @@
-// let todos = [];
 const fs = require('fs');
 const TODO_PATH = `${process.cwd()}/todo.txt`;
 const DONE_PATH = `${process.cwd()}/done.txt`;
